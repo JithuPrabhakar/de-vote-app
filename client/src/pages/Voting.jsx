@@ -4,15 +4,18 @@ import Connected from '../components/Connected'
 import Login from '../components/Login'
 import Finished from '../components/Finished'
 import { contractAbi, contractAddress } from '../constants/constant'
+import Error from '../components/Error'
 
 const Voting = () => {
+  const [provider, setProvider] = useState(null)
   const [account, setAccount] = useState(null)
   const [isConnected, setIsConnected] = useState(false)
   const [votingStatus, setVotingStatus] = useState(true)
-  const [remainingTime, setRemainingTime] = useState('')
+  const [remainingTime, setremainingTime] = useState('')
   const [candidates, setCandidates] = useState([])
   const [number, setNumber] = useState('')
   const [CanVote, setCanVote] = useState(true)
+  const [results, setResults] = useState(false)
 
   useEffect(() => {
     getCandidates()
@@ -87,6 +90,7 @@ const Voting = () => {
       signer
     )
     const status = await contractInstance.getVotingStatus()
+    console.log(status)
     setVotingStatus(status)
   }
 
@@ -100,7 +104,7 @@ const Voting = () => {
       signer
     )
     const time = await contractInstance.getRemainingTime()
-    setRemainingTime(parseInt(time, 16))
+    setremainingTime(parseInt(time, 16))
   }
 
   function handleAccountsChanged(accounts) {
@@ -115,18 +119,18 @@ const Voting = () => {
 
   async function connectToMetamask() {
     if (window.ethereum) {
-      console.log('Metamask detected')
       try {
         const provider = new ethers.providers.Web3Provider(window.ethereum)
+        setProvider(provider)
         await provider.send('eth_requestAccounts', [])
         const signer = provider.getSigner()
         const address = await signer.getAddress()
         setAccount(address)
-        console.log('Metamask connected : ' + address)
+        console.log('Metamask Connected : ' + address)
         setIsConnected(true)
         canVote()
       } catch (err) {
-        console.log(err)
+        console.error(err)
       }
     } else {
       console.error('Metamask is not detected in the browser')
@@ -136,6 +140,7 @@ const Voting = () => {
   async function handleNumberChange(e) {
     setNumber(e.target.value)
   }
+
   return (
     <>
       {votingStatus ? (
@@ -148,6 +153,7 @@ const Voting = () => {
             handleNumberChange={handleNumberChange}
             voteFunction={vote}
             showButton={CanVote}
+            setResults={setResults}
           />
         ) : (
           <Login connectWallet={connectToMetamask} />
@@ -155,6 +161,11 @@ const Voting = () => {
       ) : (
         <Finished candidates={candidates} />
       )}
+      {/*results ? (
+        <Finished />
+      ) : (
+        <Error />
+      )*/}
     </>
   )
 }

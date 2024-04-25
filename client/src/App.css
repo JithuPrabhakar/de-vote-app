@@ -8,7 +8,7 @@
 .candidates-table {
   width: 100%;
   border: 1px solid white;
-  margin-top: 10px;
+  margin-block: 10px;
 }
 
 .candidates-table td,
@@ -20,4 +20,10 @@
 .index-input {
   padding: 5px;
   margin-bottom: 10px;
+}
+
+.public-key-input {
+  padding: 5px;
+  margin-bottom: 10px;
+  width: 100%;
 }
