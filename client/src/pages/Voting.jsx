@@ -158,8 +158,10 @@ const Voting = () => {
         ) : (
           <Login connectWallet={connectToMetamask} />
         )
+      ) : results ? (
+        <Finished />
       ) : (
-        <Finished candidates={candidates} />
+        <Error />
       )}
       {/*results ? (
         <Finished />
