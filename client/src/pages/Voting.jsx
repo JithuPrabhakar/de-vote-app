@@ -4,7 +4,7 @@ import Connected from '../components/Connected'
 import Login from '../components/Login'
 import Finished from '../components/Finished'
 import { contractAbi, contractAddress } from '../constants/constant'
-import Error from '../components/Error'
+// import Error from '../components/Error'
 
 const Voting = () => {
   const [provider, setProvider] = useState(null)
@@ -15,7 +15,7 @@ const Voting = () => {
   const [candidates, setCandidates] = useState([])
   const [number, setNumber] = useState('')
   const [CanVote, setCanVote] = useState(true)
-  const [results, setResults] = useState(false)
+  // const [results, setResults] = useState(false)
 
   useEffect(() => {
     getCandidates()
@@ -153,15 +153,12 @@ const Voting = () => {
             handleNumberChange={handleNumberChange}
             voteFunction={vote}
             showButton={CanVote}
-            setResults={setResults}
           />
         ) : (
           <Login connectWallet={connectToMetamask} />
         )
-      ) : results ? (
-        <Finished />
       ) : (
-        <Error />
+        <Finished candidates={candidates} />
       )}
       {/*results ? (
         <Finished />
